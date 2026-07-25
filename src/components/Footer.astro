@@ -1,0 +1,55 @@
+---
+import { getI18n } from '../i18n/utils';
+import SpotifyEmbed from '../react/SpotifyEmbed';
+
+interface SocialLink {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+interface Props {
+  lang: string;
+  socialLinks?: SocialLink[];
+  spotifyAlbumId?: string;
+  spotifyType?: 'album' | 'playlist';
+}
+
+const { lang, socialLinks = [], spotifyAlbumId, spotifyType = 'album' } = Astro.props;
+const t = getI18n(lang);
+---
+
+<footer class="border-t border-[var(--color-card-border)] mt-auto">
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    {/* Spotify 嵌入 */}
+    {spotifyAlbumId && (
+      <div class="mb-8">
+        <SpotifyEmbed client:load albumId={spotifyAlbumId} type={spotifyType} />
+      </div>
+    )}
+
+    {/* 社交链接 */}
+    {socialLinks.length > 0 && (
+      <div class="flex justify-center gap-4 mb-6">
+        {socialLinks.map((link) => (
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={link.name}
+            class="w-10 h-10 flex items-center justify-center rounded-full
+                   text-[var(--color-text-muted)] hover:text-[var(--color-primary)]
+                   hover:bg-[var(--color-card-border)] transition-colors duration-300"
+          >
+            <span class="text-sm font-medium">{link.name}</span>
+          </a>
+        ))}
+      </div>
+    )}
+
+    {/* 版权 */}
+    <p class="text-center text-sm text-[var(--color-text-muted)]">
+      {t.footer.copyright}
+    </p>
+  </div>
+</footer>

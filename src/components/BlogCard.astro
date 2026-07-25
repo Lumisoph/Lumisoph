@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  lang: string;
+}
+
+const { post, lang } = Astro.props;
+const { title, description, date, tags, cover } = post.data;
+const readMore = lang === 'zh' ? '阅读更多' : 'Read More';
+const publishedOn = lang === 'zh' ? '发布于' : 'Published on';
+
+const slug = post.id.replace(/^(zh|en)\//, '');
+---
+
+<article class="rounded-card bg-[var(--color-card)] border border-[var(--color-card-border)]
+                overflow-hidden shadow-sm hover:shadow-md transition-all duration-300
+                hover:-translate-y-1 flex flex-col">
+  {cover && (
+    <img src={cover} alt={title} class="w-full h-48 object-cover" loading="lazy" />
+  )}
+  <div class="p-6 flex flex-col flex-1">
+    <time class="text-xs text-[var(--color-text-muted)] mb-2">
+      {publishedOn} {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
+    </time>
+    <h3 class="text-lg font-semibold text-[var(--color-text)] mb-2">{title}</h3>
+    <p class="text-sm text-[var(--color-text-muted)] mb-4 line-clamp-3 flex-1">{description}</p>
+
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-4">
+        {tags.map((tag) => (
+          <span class="px-2 py-0.5 text-xs rounded-full bg-[var(--color-card-border)] text-[var(--color-text-muted)]">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <a href={`/${lang}/blog/${slug}`}
+       class="text-sm text-[var(--color-primary)] hover:underline transition-colors duration-300">
+      {readMore} →
+    </a>
+  </div>
+</article>

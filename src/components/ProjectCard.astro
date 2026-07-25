@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, description, tags, github, demo } = project.data;
+---
+
+<div class="rounded-card bg-[var(--color-card)] border border-[var(--color-card-border)]
+            overflow-hidden shadow-sm hover:shadow-md transition-all duration-300
+            hover:-translate-y-1">
+  {project.data.image && (
+    <img src={project.data.image} alt={title} class="w-full h-48 object-cover" loading="lazy" />
+  )}
+  <div class="p-6">
+    <h3 class="text-lg font-semibold text-[var(--color-text)] mb-2">{title}</h3>
+    <p class="text-sm text-[var(--color-text-muted)] mb-4 line-clamp-3">{description}</p>
+
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-4">
+        {tags.map((tag) => (
+          <span class="px-2 py-0.5 text-xs rounded-full bg-[var(--color-card-border)] text-[var(--color-text-muted)]">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <div class="flex gap-3">
+      {github && (
+        <a href={github} target="_blank" rel="noopener noreferrer"
+           class="text-sm text-[var(--color-primary)] hover:underline transition-colors duration-300">
+          GitHub
+        </a>
+      )}
+      {demo && (
+        <a href={demo} target="_blank" rel="noopener noreferrer"
+           class="text-sm text-[var(--color-primary)] hover:underline transition-colors duration-300">
+          演示
+        </a>
+      )}
+    </div>
+  </div>
+</div>

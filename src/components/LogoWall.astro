@@ -1,0 +1,47 @@
+---
+interface Props {
+  logos: { src: string; alt: string }[];
+  speed?: number;
+}
+
+const { logos, speed = 20 } = Astro.props;
+const duration = logos.length * speed;
+---
+
+{logos.length > 0 && (
+  <section class="py-16 overflow-hidden">
+    <div class="relative max-w-6xl mx-auto px-4">
+      <style>
+        @keyframes scroll-logos {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .logo-scroll {
+          animation: scroll-logos var(--duration) linear infinite;
+          animation-duration: ${duration}s;
+        }
+        .logo-scroll:hover {
+          animation-play-state: paused;
+        }
+      </style>
+      <div class="logo-scroll flex gap-12 items-center whitespace-nowrap w-max">
+        {logos.map((logo) => (
+          <img
+            src={logo.src}
+            alt={logo.alt}
+            class="h-10 md:h-12 w-auto opacity-50 hover:opacity-100 transition-opacity duration-300"
+            loading="lazy"
+          />
+        ))}
+        {logos.map((logo) => (
+          <img
+            src={logo.src}
+            alt={logo.alt}
+            class="h-10 md:h-12 w-auto opacity-50 hover:opacity-100 transition-opacity duration-300"
+            loading="lazy"
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+)}

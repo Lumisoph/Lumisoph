@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import PhotoWall from '../../components/PhotoWall.astro';
+import { getI18n } from '../../i18n/utils';
+
+const lang = 'zh';
+const t = getI18n(lang);
+const currentPath = '/zh/photos';
+
+// 用户后续替换为实际照片数据
+const photos: { src: string; alt: string; width: number; height: number }[] = [];
+---
+
+<Layout lang={lang} title={`${t.photos.title} - ${t.site.title}`}>
+  <Nav lang={lang} currentPath={currentPath} />
+  <main class="px-4 py-16">
+    <h1 class="text-3xl md:text-4xl font-bold text-center mb-4">{t.photos.title}</h1>
+    <p class="text-center text-[var(--color-text-muted)] mb-12">{t.photos.description}</p>
+    <PhotoWall photos={photos} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

@@ -1,0 +1,26 @@
+---
+import PhotoWallMasonry from '../react/PhotoWallMasonry';
+
+interface Photo {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+---
+
+{photos.length === 0 ? (
+  <div class="text-center text-[var(--color-text-muted)] py-20">
+    <p>即将更新照片...</p>
+  </div>
+) : (
+  <div class="max-w-6xl mx-auto">
+    <PhotoWallMasonry client:load photos={photos} />
+  </div>
+)}

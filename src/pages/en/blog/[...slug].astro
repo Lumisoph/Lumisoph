@@ -1,0 +1,62 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import { getI18n } from '../../../i18n/utils';
+
+const lang = 'en';
+const t = getI18n(lang);
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ id }) => id.startsWith('en/'));
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/^en\//, '') },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const currentPath = `/en/blog/${post.id.replace(/^en\//, '')}`;
+---
+
+<Layout lang={lang} title={`${post.data.title} - ${t.site.title}`} description={post.data.description}>
+  <Nav lang={lang} currentPath={currentPath} />
+  <main class="max-w-3xl mx-auto px-4 py-16">
+    <a href={`/${lang}/blog`} class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)]
+              hover:text-[var(--color-primary)] transition-colors duration-300 mb-8">
+      &larr; {t.blog.backToList}
+    </a>
+
+    <article>
+      <header class="mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-4">
+          {post.data.title}
+        </h1>
+        <time class="text-sm text-[var(--color-text-muted)]">
+          {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+        {post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-3">
+            {post.data.tags.map((tag) => (
+              <span class="px-2 py-0.5 text-xs rounded-full bg-[var(--color-card-border)] text-[var(--color-text-muted)]">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <div class="prose prose-lg dark:prose-invert max-w-none
+                  prose-headings:text-[var(--color-text)]
+                  prose-p:text-[var(--color-text-muted)]
+                  prose-a:text-[var(--color-primary)]
+                  prose-pre:bg-[var(--color-card)]
+                  prose-pre:border prose-pre:border-[var(--color-card-border)]">
+        <Content />
+      </div>
+    </article>
+  </main>
+  <Footer lang={lang} />
+</Layout>
