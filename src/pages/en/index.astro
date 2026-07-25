@@ -13,6 +13,8 @@ const currentPath = '/en/';
 
 const socialLinks: { name: string; url: string; icon: string }[] = [];
 const logos: { src: string; alt: string }[] = [];
+const musicId = '';
+const musicType = 0;
 ---
 
 <Layout lang={lang} title={t.site.title} description={t.site.description}>
@@ -21,6 +23,6 @@ const logos: { src: string; alt: string }[] = [];
     <Hero currentPath={currentPath} socialLinks={socialLinks} />
     <LogoWall logos={logos} />
   </main>
-  <Footer lang={lang} />
+  <Footer lang={lang} musicId={musicId} musicType={musicType} />
   <BackgroundEffect client:load />
 </Layout>

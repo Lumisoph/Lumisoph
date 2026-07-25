@@ -15,6 +15,9 @@ const currentPath = '/zh/';
 const socialLinks: { name: string; url: string; icon: string }[] = [];
 // Logo 数据 — 用户后续提供
 const logos: { src: string; alt: string }[] = [];
+// 网易云音乐 — 从分享链接复制 ID，例如 music.163.com/#/playlist?id=123456789 → ID = 123456789
+const musicId = '';          // 空字符串则不显示播放器
+const musicType = 0;         // 0=歌单, 1=专辑, 2=单曲
 ---
 
 <Layout lang={lang} title={t.site.title} description={t.site.description}>
@@ -23,6 +26,6 @@ const logos: { src: string; alt: string }[] = [];
     <Hero currentPath={currentPath} socialLinks={socialLinks} />
     <LogoWall logos={logos} />
   </main>
-  <Footer lang={lang} />
+  <Footer lang={lang} musicId={musicId} musicType={musicType} />
   <BackgroundEffect client:load />
 </Layout>
