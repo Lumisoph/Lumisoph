@@ -47,7 +47,12 @@ const {
     <!-- 背景图 -->
     <div class="bg-frame"></div>
     <!-- 全局音乐悬浮小插件 -->
-    <MusicEmbed client:load musicId="2060110917" type={2} />
+    <MusicEmbed client:load
+      audioSrc="/music/鲜克 - 南墙小子.mp3"
+      coverSrc="/music/鲜克 - 南墙小子.jpg"
+      title="南墙小子"
+      artist="鲜克"
+    />
     <slot />
   </body>
 </html>
