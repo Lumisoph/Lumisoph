@@ -9,7 +9,22 @@ const lang = 'en';
 const t = getI18n(lang);
 const currentPath = '/en/photos';
 
-const photos: { src: string; alt: string; width: number; height: number }[] = [];
+const photoFiles = [
+  '473f4553349a0bdbbde77e7fe008b104.jpg',
+  '47bc484b704196905bbef14b5ca46c18.jpg',
+  '4d0600a7f54b84c1d4db64d99bc00c7d.jpg',
+  '67ab9b46269a18a074958d8aa756b2ff.jpg',
+  '69c1a6874c95dc03ee3a830f2f1bf953.jpg',
+  '7ab9e1e09f81eff0536f65f0d6de2a48.jpg',
+  'b0990be9f8cf46846c943ad415e0b848.jpg',
+  'ca181c1622c0ffa9195ae15c81c08e97.jpg',
+  'ceb4b2919c2caa8d2615a7ef3bbbcfd8.jpg',
+];
+
+const photos = photoFiles.map((file) => ({
+  src: `/images/photos/${file}`,
+  alt: file.replace(/\.(jpg|png|webp)$/i, ''),
+}));
 ---
 
 <Layout lang={lang} title={`${t.photos.title} - ${t.site.title}`}>

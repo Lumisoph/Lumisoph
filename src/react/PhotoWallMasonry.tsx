@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface Photo {
   src: string;
   alt: string;
-  width: number;
-  height: number;
 }
 
 interface Props {
@@ -12,18 +10,6 @@ interface Props {
 }
 
 function Lightbox({ photo, onClose }: { photo: Photo; onClose: () => void }) {
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handler);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', handler);
-      document.body.style.overflow = '';
-    };
-  }, [onClose]);
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
@@ -51,46 +37,23 @@ function Lightbox({ photo, onClose }: { photo: Photo; onClose: () => void }) {
 
 export default function PhotoWallMasonry({ photos }: Props) {
   const [activePhoto, setActivePhoto] = useState<Photo | null>(null);
-  const [columns, setColumns] = useState(3);
-
-  useEffect(() => {
-    const updateColumns = () => {
-      setColumns(window.innerWidth < 768 ? 2 : window.innerWidth < 1024 ? 3 : 4);
-    };
-    updateColumns();
-    window.addEventListener('resize', updateColumns);
-    return () => window.removeEventListener('resize', updateColumns);
-  }, []);
-
-  const columnPhotos: Photo[][] = Array.from({ length: columns }, () => []);
-  const columnHeights = Array(columns).fill(0);
-
-  for (const photo of photos) {
-    const shortest = columnHeights.indexOf(Math.min(...columnHeights));
-    columnPhotos[shortest].push(photo);
-    columnHeights[shortest] += photo.height / photo.width;
-  }
 
   return (
     <>
-      <div className="flex gap-4">
-        {columnPhotos.map((col, ci) => (
-          <div key={ci} className="flex-1 flex flex-col gap-4">
-            {col.map((photo, pi) => (
-              <div
-                key={pi}
-                className="rounded-card overflow-hidden cursor-pointer
-                           hover:opacity-90 hover:scale-[1.02] transition-all duration-300"
-                onClick={() => setActivePhoto(photo)}
-              >
-                <img
-                  src={photo.src}
-                  alt={photo.alt}
-                  className="w-full h-auto block"
-                  loading="lazy"
-                />
-              </div>
-            ))}
+      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+        {photos.map((photo, i) => (
+          <div
+            key={i}
+            className="break-inside-avoid rounded-card overflow-hidden cursor-pointer
+                       hover:opacity-90 hover:scale-[1.02] transition-all duration-300"
+            onClick={() => setActivePhoto(photo)}
+          >
+            <img
+              src={photo.src}
+              alt={photo.alt}
+              className="w-full h-auto block"
+              loading="lazy"
+            />
           </div>
         ))}
       </div>

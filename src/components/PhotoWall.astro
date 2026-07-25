@@ -1,15 +1,8 @@
 ---
 import PhotoWallMasonry from '../react/PhotoWallMasonry';
 
-interface Photo {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-}
-
 interface Props {
-  photos: Photo[];
+  photos: { src: string; alt: string }[];
 }
 
 const { photos } = Astro.props;
