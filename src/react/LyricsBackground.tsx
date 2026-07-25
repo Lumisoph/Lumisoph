@@ -20,21 +20,14 @@ function parseLRC(raw: string): LyricLine[] {
   return lines;
 }
 
-/** 宣纸纹理背景 */
+/** 宣纸纹理 */
 function RicePaper() {
   return (
-    <div
-      className="fixed inset-0 pointer-events-none"
-      style={{
-        zIndex: -1,
-        background: `
-          radial-gradient(ellipse at 20% 50%, rgba(139,119,90,0.04) 0%, transparent 50%),
-          radial-gradient(ellipse at 80% 50%, rgba(139,119,90,0.04) 0%, transparent 50%),
-          repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139,119,90,0.015) 2px, rgba(139,119,90,0.015) 4px)
-        `,
-      }}
-      aria-hidden="true"
-    />
+    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1, background: `
+      radial-gradient(ellipse at 20% 50%, rgba(139,119,90,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 50%, rgba(139,119,90,0.04) 0%, transparent 50%),
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139,119,90,0.015) 2px, rgba(139,119,90,0.015) 4px)
+    `}} aria-hidden="true" />
   );
 }
 
@@ -43,6 +36,7 @@ export default function LyricsBackground({ lrcPath }: Props) {
   const [lineIndex, setLineIndex] = useState(-1);
   const [charCount, setCharCount] = useState(0);
   const prevIndex = useRef(-1);
+  const keyRef = useRef(0);
 
   useEffect(() => {
     fetch(lrcPath).then(r => r.text()).then(raw => setLyrics(parseLRC(raw))).catch(() => {});
@@ -66,6 +60,7 @@ export default function LyricsBackground({ lrcPath }: Props) {
   useEffect(() => {
     if (lineIndex !== prevIndex.current) {
       prevIndex.current = lineIndex;
+      keyRef.current++;
       setCharCount(0);
       const text = lyrics[lineIndex]?.text ?? '';
       if (!text) return;
@@ -81,77 +76,69 @@ export default function LyricsBackground({ lrcPath }: Props) {
 
   if (lineIndex < 0) return <RicePaper />;
 
+  const lineStyle: React.CSSProperties = {
+    fontFamily: "'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif",
+    writingMode: 'vertical-rl',
+    textOrientation: 'upright',
+  };
+
   return (
     <>
       <RicePaper />
 
-      {/* 左右双栏歌词 */}
       <div className="fixed inset-0 pointer-events-none select-none overflow-hidden" style={{ zIndex: -1 }}>
-        <div className="h-full max-w-6xl mx-auto flex items-center justify-center gap-24 md:gap-40 px-8">
-          {/* 左栏 — 当前句 */}
-          <div className="flex-1 text-right">
-            <div className="inline-block max-w-xs">
-              <p
-                className="text-2xl md:text-4xl font-bold leading-relaxed tracking-[0.15em]"
-                style={{
-                  fontFamily: "'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif",
-                  color: 'var(--color-text)',
-                  opacity: 0.18,
-                  textShadow: `
-                    1px 1px 0 rgba(139,119,90,0.1),
-                    0 0 40px var(--color-primary),
-                    0 0 80px var(--color-primary)
-                  `,
-                }}
-              >
-                {currentLine.slice(0, charCount).split('').map((ch, i) => (
-                  <span key={i} className="inline-block animate-[charIn_0.5s_ease-out]">{ch}</span>
-                ))}
-                {charCount < currentLine.length && (
-                  <span className="inline-block w-[2px] h-[0.7em] bg-[var(--color-primary)]/30 align-middle animate-pulse" />
-                )}
-              </p>
-            </div>
+        <div className="h-full flex items-center justify-center gap-[30px] md:gap-[60px] px-8">
+
+          {/* 左联 — 当前句，从左侧滑入 */}
+          <div key={`L-${keyRef.current}`} className="animate-[slideFromLeft_0.8s_ease-out]">
+            <p
+              className="text-2xl md:text-4xl font-bold tracking-[0.25em] leading-loose"
+              style={{
+                ...lineStyle,
+                color: 'var(--color-text)',
+                opacity: 0.18,
+                textShadow: '1px 1px 0 rgba(139,119,90,0.1), 0 0 40px var(--color-primary), 0 0 80px var(--color-primary)',
+              }}
+            >
+              {currentLine.slice(0, charCount)}
+              {charCount < currentLine.length && (
+                <span className="inline-block w-[2px] h-[0.7em] bg-[var(--color-primary)]/30 animate-pulse" />
+              )}
+            </p>
           </div>
 
-          {/* 竖线分隔 */}
-          <div
-            className="hidden md:block w-px h-32 self-center"
-            style={{
-              background: 'linear-gradient(to bottom, transparent, var(--color-primary), transparent)',
-              opacity: 0.15,
-            }}
+          {/* 中线分隔 */}
+          <div className="w-px h-40 md:h-60 self-center"
+            style={{ background: 'linear-gradient(to bottom, transparent, var(--color-primary), transparent)', opacity: 0.15 }}
           />
 
-          {/* 右栏 — 下一句 */}
-          <div className="flex-1 text-left">
-            {nextLine && (
-              <div className="inline-block max-w-xs">
-                <p
-                  className="text-lg md:text-2xl font-normal leading-relaxed tracking-[0.12em]"
-                  style={{
-                    fontFamily: "'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif",
-                    color: 'var(--color-text)',
-                    opacity: 0.08,
-                    textShadow: '0 0 20px var(--color-primary)',
-                  }}
-                >
-                  {nextLine}
-                </p>
-              </div>
-            )}
-          </div>
+          {/* 右联 — 下一句，从右侧滑入 */}
+          {nextLine && (
+            <div key={`R-${keyRef.current}`} className="animate-[slideFromRight_0.8s_ease-out]">
+              <p
+                className="text-lg md:text-2xl font-normal tracking-[0.2em] leading-loose"
+                style={{
+                  ...lineStyle,
+                  color: 'var(--color-text)',
+                  opacity: 0.08,
+                  textShadow: '0 0 20px var(--color-primary)',
+                }}
+              >
+                {nextLine}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
       <style>{`
-        @keyframes charIn {
-          0% { opacity: 0; transform: translateY(6px) scale(0.9); filter: blur(3px); }
-          60% { opacity: 0.7; filter: blur(1px); }
-          100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        @keyframes slideFromLeft {
+          0% { opacity: 0; transform: translateX(-120px); filter: blur(4px); }
+          100% { opacity: 1; transform: translateX(0); filter: blur(0); }
         }
-        .dark p {
-          text-shadow: 1px 1px 0 rgba(200,180,140,0.1), 0 0 40px #E9C46A, 0 0 80px #E9C46A !important;
+        @keyframes slideFromRight {
+          0% { opacity: 0; transform: translateX(120px); filter: blur(4px); }
+          100% { opacity: 1; transform: translateX(0); filter: blur(0); }
         }
       `}</style>
     </>
