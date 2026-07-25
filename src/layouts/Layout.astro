@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import { ClientRouter } from 'astro:transitions';
 import MusicEmbed from '../react/MusicEmbed';
 import LyricsBackground from '../react/LyricsBackground';
 
@@ -31,19 +30,14 @@ const {
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <ClientRouter />
     <title>{title}</title>
   </head>
   <body>
     <script is:inline>
-      // 防止页面加载时的主题闪烁，跨页面保持一致
       (function() {
-        var saved = localStorage.getItem('theme');
-        var prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (saved === 'dark' || (!saved && prefers)) {
+        var s = localStorage.getItem('theme');
+        if (s === 'dark' || (!s && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
           document.documentElement.classList.add('dark');
-        } else if (saved === 'light') {
-          document.documentElement.classList.remove('dark');
         }
       })();
     </script>
