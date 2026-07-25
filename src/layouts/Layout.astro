@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { ViewTransitions } from 'astro:transitions';
+import MusicEmbed from '../react/MusicEmbed';
 
 export interface Props {
   lang: 'zh' | 'en';
@@ -43,8 +44,10 @@ const {
         }
       })();
     </script>
-    <!-- 背景图卡片 -->
+    <!-- 背景图 -->
     <div class="bg-frame"></div>
+    <!-- 全局音乐悬浮小插件 -->
+    <MusicEmbed client:load musicId="2060110917" type={2} />
     <slot />
   </body>
 </html>

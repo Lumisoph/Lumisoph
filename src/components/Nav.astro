@@ -2,8 +2,6 @@
 import { getI18n } from '../i18n/utils';
 import ThemeToggle from '../react/ThemeToggle';
 import LangToggle from '../react/LangToggle';
-import MusicEmbed from '../react/MusicEmbed';
-
 interface Props {
   lang: 'zh' | 'en';
   currentPath: string;
@@ -24,9 +22,6 @@ const isActive = (href: string) => {
   return currentPath.startsWith(href);
 };
 
-// 全站音乐 — 在 Nav 中定义，所有页面共享
-const musicId = '2060110917';
-const musicType = 2; // 2=单曲
 ---
 
 <nav class="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-bg)]/80 border-b border-[var(--color-card-border)]">
@@ -51,16 +46,14 @@ const musicType = 2; // 2=单曲
             {link.label}
           </a>
         ))}
-        <div class="flex items-center gap-1">
-          <MusicEmbed client:load musicId={musicId} type={musicType} />
+        <div class="flex items-center gap-2">
           <ThemeToggle client:load />
           <LangToggle client:load currentPath={currentPath} currentLang={lang} />
         </div>
       </div>
 
       <!-- 移动端 -->
-      <div class="md:hidden flex items-center gap-1">
-        <MusicEmbed client:load musicId={musicId} type={musicType} />
+      <div class="md:hidden flex items-center gap-2">
         <ThemeToggle client:load />
         <LangToggle client:load currentPath={currentPath} currentLang={lang} />
         <button

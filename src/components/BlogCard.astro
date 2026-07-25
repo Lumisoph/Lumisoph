@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { getI18n } from '../i18n/utils';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -7,9 +8,8 @@ interface Props {
 }
 
 const { post, lang } = Astro.props;
+const t = getI18n(lang);
 const { title, description, date, tags, cover } = post.data;
-const readMore = lang === 'zh' ? '阅读更多' : 'Read More';
-const publishedOn = lang === 'zh' ? '发布于' : 'Published on';
 
 const slug = post.id.replace(/^(zh|en)\//, '');
 ---
@@ -22,7 +22,7 @@ const slug = post.id.replace(/^(zh|en)\//, '');
   )}
   <div class="p-6 flex flex-col flex-1">
     <time class="text-xs text-[var(--color-text-muted)] mb-2">
-      {publishedOn} {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
+      {t.blog.publishedOn} {date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US')}
     </time>
     <h3 class="text-lg font-semibold text-[var(--color-text)] mb-2">{title}</h3>
     <p class="text-sm text-[var(--color-text-muted)] mb-4 line-clamp-3 flex-1">{description}</p>
@@ -39,7 +39,7 @@ const slug = post.id.replace(/^(zh|en)\//, '');
 
     <a href={`/${lang}/blog/${slug}`}
        class="text-sm text-[var(--color-primary)] hover:underline transition-colors duration-300">
-      {readMore} →
+      {t.blog.readMore} →
     </a>
   </div>
 </article>
