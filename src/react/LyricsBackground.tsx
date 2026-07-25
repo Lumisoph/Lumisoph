@@ -66,7 +66,7 @@ export default function LyricsBackground({ lrcPath }: Props) {
       setPhase('ink');
       const text = lyrics[lineIndex]?.text ?? '';
       if (!text) return;
-      const interval = Math.max(160, 4000 / text.length);
+      const interval = Math.max(80, 1800 / text.length);
       let c = 0;
       const timer = setInterval(() => {
         c++;
