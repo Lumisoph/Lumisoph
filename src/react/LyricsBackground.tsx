@@ -48,6 +48,8 @@ export default function LyricsBackground({ lrcPath }: Props) {
     if (lyrics.length === 0) return;
     const onTick = (e: Event) => {
       const t = (e as CustomEvent).detail as number;
+      // 时间归零 = 停止/重头，保持当前歌词不消失
+      if (t <= 0) return;
       let i = -1;
       for (let j = 0; j < lyrics.length; j++) {
         if (lyrics[j].time <= t) i = j; else break;
