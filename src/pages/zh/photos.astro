@@ -1,4 +1,6 @@
 ---
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
@@ -9,22 +11,15 @@ const lang = 'zh';
 const t = getI18n(lang);
 const currentPath = '/zh/photos';
 
-// ponytail: 照片列表直接硬编码，后续加照片在这加一行即可
-const photoFiles = [
-  '473f4553349a0bdbbde77e7fe008b104.jpg',
-  '47bc484b704196905bbef14b5ca46c18.jpg',
-  '4d0600a7f54b84c1d4db64d99bc00c7d.jpg',
-  '67ab9b46269a18a074958d8aa756b2ff.jpg',
-  '69c1a6874c95dc03ee3a830f2f1bf953.jpg',
-  '7ab9e1e09f81eff0536f65f0d6de2a48.jpg',
-  'b0990be9f8cf46846c943ad415e0b848.jpg',
-  'ca181c1622c0ffa9195ae15c81c08e97.jpg',
-  'ceb4b2919c2caa8d2615a7ef3bbbcfd8.jpg',
-];
-
+// 构建时自动扫描 public/images/photos/ 下所有图片
+const dir = join(process.cwd(), 'public/images/photos');
+const files = readdirSync(dir, { withFileTypes: true });
+const photoFiles = files
+  .filter((f) => f.isFile() && /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name))
+  .map((f) => f.name);
 const photos = photoFiles.map((file) => ({
   src: `/images/photos/${file}`,
-  alt: file.replace(/\.(jpg|png|webp)$/i, ''),
+  alt: file.replace(/\.(jpg|png|webp|jpeg|gif)$/i, ''),
 }));
 ---
 
