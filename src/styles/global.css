@@ -38,45 +38,18 @@ body {
   min-height: 100vh;
 }
 
-/* 背景图 — 居中卡片式呈现，适应不同宽高比 */
+/* 全站背景图 — 铺满视口 */
 .bg-frame {
   position: fixed;
   inset: 0;
   z-index: -2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-
-.bg-frame::before {
-  content: '';
-  display: block;
-  width: 100%;
-  max-width: 1200px;
-  height: calc(100vh - 64px);
-  border-radius: 16px;
-  overflow: hidden;
   background-image: url('/images/day.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: 0 4px 40px rgba(126, 200, 227, 0.15);
-  transition: background-image 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+  transition: background-image 0.5s ease-in-out;
 }
 
-.dark .bg-frame::before {
+.dark .bg-frame {
   background-image: url('/images/night.jpg');
-  box-shadow: 0 4px 40px rgba(233, 196, 106, 0.1);
-}
-
-/* 手机端缩小卡片边距 */
-@media (max-width: 767px) {
-  .bg-frame {
-    padding: 8px;
-  }
-  .bg-frame::before {
-    height: calc(100vh - 32px);
-    border-radius: 12px;
-  }
 }
