@@ -1,13 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 
-interface LyricLine {
-  time: number;
-  text: string;
-}
-
-interface Props {
-  lrcPath: string;
-}
+interface LyricLine { time: number; text: string; }
+interface Props { lrcPath: string; }
 
 function parseLRC(raw: string): LyricLine[] {
   const lines: LyricLine[] = [];
@@ -16,8 +10,7 @@ function parseLRC(raw: string): LyricLine[] {
     if (!trimmed || trimmed.startsWith('{')) continue;
     const match = trimmed.match(/^\[(\d{2}):(\d{2})\.(\d{2,3})\](.*)/);
     if (!match) continue;
-    const min = parseInt(match[1]);
-    const sec = parseInt(match[2]);
+    const min = parseInt(match[1]), sec = parseInt(match[2]);
     const ms = parseInt(match[3]) / (match[3].length === 3 ? 1000 : 100);
     const text = match[4].trim();
     if ((text.startsWith('（') && text.endsWith('）')) || (text.startsWith('(') && text.endsWith(')'))) continue;
@@ -27,68 +20,19 @@ function parseLRC(raw: string): LyricLine[] {
   return lines;
 }
 
-/** 墨滴粒子 */
-function InkDrops() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animId: number;
-    const drops: { x: number; y: number; r: number; alpha: number; vy: number }[] = [];
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener('resize', resize);
-
-    // 缓慢生成墨滴
-    const spawn = () => {
-      if (drops.length < 5) {
-        drops.push({
-          x: Math.random() * canvas.width,
-          y: -10,
-          r: Math.random() * 3 + 1,
-          alpha: Math.random() * 0.15 + 0.05,
-          vy: Math.random() * 0.3 + 0.1,
-        });
-      }
-    };
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const d of drops) {
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        const isDark = document.documentElement.classList.contains('dark');
-        ctx.fillStyle = isDark ? `rgba(233,196,106,${d.alpha})` : `rgba(80,60,40,${d.alpha})`;
-        ctx.fill();
-        d.y += d.vy;
-        if (d.y > canvas.height + 10) {
-          drops.splice(drops.indexOf(d), 1);
-        }
-      }
-      if (Math.random() < 0.03) spawn();
-      animId = requestAnimationFrame(draw);
-    };
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
-
+/** 宣纸纹理背景 */
+function RicePaper() {
   return (
-    <canvas
-      ref={canvasRef}
+    <div
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: -1 }}
+      style={{
+        zIndex: -1,
+        background: `
+          radial-gradient(ellipse at 20% 50%, rgba(139,119,90,0.04) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 50%, rgba(139,119,90,0.04) 0%, transparent 50%),
+          repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139,119,90,0.015) 2px, rgba(139,119,90,0.015) 4px)
+        `,
+      }}
       aria-hidden="true"
     />
   );
@@ -101,96 +45,121 @@ export default function LyricsBackground({ lrcPath }: Props) {
   const prevIndex = useRef(-1);
 
   useEffect(() => {
-    fetch(lrcPath)
-      .then((r) => r.text())
-      .then((raw) => setLyrics(parseLRC(raw)))
-      .catch(() => {});
+    fetch(lrcPath).then(r => r.text()).then(raw => setLyrics(parseLRC(raw))).catch(() => {});
   }, [lrcPath]);
 
   useEffect(() => {
     if (lyrics.length === 0) return;
-
     const onTick = (e: Event) => {
       const t = (e as CustomEvent).detail as number;
       let i = -1;
       for (let j = 0; j < lyrics.length; j++) {
-        if (lyrics[j].time <= t) i = j;
-        else break;
+        if (lyrics[j].time <= t) i = j; else break;
       }
       setLineIndex(i);
     };
-
     window.addEventListener('music-tick', onTick);
     return () => window.removeEventListener('music-tick', onTick);
   }, [lyrics]);
 
-  // 行切换时逐字动画
+  // 逐字动画
   useEffect(() => {
     if (lineIndex !== prevIndex.current) {
       prevIndex.current = lineIndex;
       setCharCount(0);
       const text = lyrics[lineIndex]?.text ?? '';
       if (!text) return;
-      const interval = Math.max(80, 1200 / text.length); // 每字间隔，至少 80ms
+      const interval = Math.max(90, 1400 / text.length);
       let c = 0;
-      const timer = setInterval(() => {
-        c++;
-        setCharCount(c);
-        if (c >= text.length) clearInterval(timer);
-      }, interval);
+      const timer = setInterval(() => { c++; setCharCount(c); if (c >= text.length) clearInterval(timer); }, interval);
       return () => clearInterval(timer);
     }
   }, [lineIndex]);
 
-  const text = lyrics[lineIndex]?.text ?? '';
-  const visibleChars = text.slice(0, charCount);
+  const currentLine = lyrics[lineIndex]?.text ?? '';
+  const nextLine = lyrics[lineIndex + 1]?.text ?? '';
+
+  if (lineIndex < 0) return <RicePaper />;
+
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
 
   return (
     <>
-      <InkDrops />
+      <RicePaper />
 
-      {/* 歌词文字 */}
-      <div
-        className="fixed inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-        style={{ zIndex: -1 }}
-      >
-        {text && (
-          <div className="px-10 text-center max-w-2xl">
-            <p
-              className="text-3xl md:text-5xl font-bold tracking-[0.2em] leading-relaxed"
-              style={{
-                color: 'var(--color-text)',
-                opacity: 0.15,
-                textShadow: `
-                  0 0 20px var(--color-primary),
-                  0 0 60px var(--color-primary),
-                  0 0 100px var(--color-primary)
-                `,
-              }}
-            >
-              {/* 逐字渲染：已出现的字 + 最后字的下划线笔触 */}
-              {visibleChars.split('').map((ch, i) => (
-                <span
-                  key={i}
-                  className="inline-block animate-[charIn_0.4s_ease-out]"
-                  style={{ animationDelay: '0s' }}
-                >
-                  {ch}
-                </span>
-              ))}
-              {/* 笔触光标 */}
-              {charCount < text.length && (
-                <span className="inline-block w-[2px] h-[0.8em] bg-[var(--color-primary)]/40 align-middle animate-pulse" />
-              )}
-            </p>
+      {/* 左右双栏歌词 */}
+      <div className="fixed inset-0 pointer-events-none select-none overflow-hidden" style={{ zIndex: -1 }}>
+        <div className="h-full max-w-6xl mx-auto flex items-center justify-center gap-16 md:gap-24 px-8">
+          {/* 左栏 — 当前句 */}
+          <div className="flex-1 text-right">
+            <div className="inline-block max-w-xs">
+              <p className="text-[10px] tracking-[0.3em] text-[var(--color-text-muted)]/30 mb-2 font-sans">
+                當 前
+              </p>
+              <p
+                className="text-2xl md:text-4xl font-bold leading-relaxed tracking-[0.15em]"
+                style={{
+                  fontFamily: "'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif",
+                  color: 'var(--color-text)',
+                  opacity: 0.18,
+                  textShadow: `
+                    1px 1px 0 rgba(139,119,90,0.1),
+                    0 0 40px var(--color-primary),
+                    0 0 80px var(--color-primary)
+                  `,
+                }}
+              >
+                {currentLine.slice(0, charCount).split('').map((ch, i) => (
+                  <span key={i} className="inline-block animate-[charIn_0.5s_ease-out]">{ch}</span>
+                ))}
+                {charCount < currentLine.length && (
+                  <span className="inline-block w-[2px] h-[0.7em] bg-[var(--color-primary)]/30 align-middle animate-pulse" />
+                )}
+              </p>
+            </div>
           </div>
-        )}
+
+          {/* 竖线分隔 */}
+          <div
+            className="hidden md:block w-px h-32 self-center"
+            style={{
+              background: 'linear-gradient(to bottom, transparent, var(--color-primary), transparent)',
+              opacity: 0.15,
+            }}
+          />
+
+          {/* 右栏 — 下一句 */}
+          <div className="flex-1 text-left">
+            {nextLine && (
+              <div className="inline-block max-w-xs">
+                <p className="text-[10px] tracking-[0.3em] text-[var(--color-text-muted)]/30 mb-2 font-sans">
+                  即 將
+                </p>
+                <p
+                  className="text-lg md:text-2xl font-normal leading-relaxed tracking-[0.12em]"
+                  style={{
+                    fontFamily: "'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif",
+                    color: 'var(--color-text)',
+                    opacity: 0.08,
+                    textShadow: '0 0 20px var(--color-primary)',
+                  }}
+                >
+                  {nextLine}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <style>{`
         @keyframes charIn {
-          0% { opacity: 0; transform: translateY(4px); filter: blur(2px); }
-          100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+          0% { opacity: 0; transform: translateY(6px) scale(0.9); filter: blur(3px); }
+          60% { opacity: 0.7; filter: blur(1px); }
+          100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+        .dark p {
+          text-shadow: 1px 1px 0 rgba(200,180,140,0.1), 0 0 40px #E9C46A, 0 0 80px #E9C46A !important;
         }
       `}</style>
     </>
