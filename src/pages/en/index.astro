@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Hero from '../../components/Hero.astro';
+import BackgroundEffect from '../../react/BackgroundEffect';
+import { getI18n } from '../../i18n/utils';
+
+const lang = 'en';
+const t = getI18n(lang);
+const currentPath = '/en/';
+
+// Social links — to be provided by user
+const socialLinks: { name: string; url: string; icon: string }[] = [];
+---
+
+<Layout lang={lang} title={t.site.title} description={t.site.description}>
+  <Nav lang={lang} currentPath={currentPath} />
+  <main>
+    <Hero currentPath={currentPath} socialLinks={socialLinks} />
+  </main>
+  <BackgroundEffect client:load />
+</Layout>

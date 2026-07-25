@@ -1,0 +1,91 @@
+---
+import { getI18n } from '../i18n/utils';
+import ThemeToggle from '../react/ThemeToggle';
+import LangToggle from '../react/LangToggle';
+
+interface Props {
+  lang: 'zh' | 'en';
+  currentPath: string;
+}
+
+const { lang, currentPath } = Astro.props;
+const t = getI18n(lang);
+
+const links = [
+  { href: `/${lang}/`, label: t.nav.home },
+  { href: `/${lang}/projects`, label: t.nav.projects },
+  { href: `/${lang}/blog`, label: t.nav.blog },
+  { href: `/${lang}/photos`, label: t.nav.photos },
+  { href: `/${lang}/contact`, label: t.nav.contact },
+];
+
+const isActive = (href: string) => {
+  if (href === `/${lang}/`) return currentPath === `/${lang}/`;
+  return currentPath.startsWith(href);
+};
+---
+
+<nav class="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-bg)]/80 border-b border-[var(--color-card-border)]">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href={`/${lang}/`} class="text-lg font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-300">
+        {t.home.name}
+      </a>
+
+      <!-- 桌面端链接 -->
+      <div class="hidden md:flex items-center gap-6">
+        {links.map((link) => (
+          <a
+            href={link.href}
+            class={`text-sm transition-colors duration-300 ${
+              isActive(link.href)
+                ? 'text-[var(--color-primary)] font-medium'
+                : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
+            }`}
+          >
+            {link.label}
+          </a>
+        ))}
+        <div class="flex items-center gap-2">
+          <ThemeToggle client:load />
+          <LangToggle client:load currentPath={currentPath} currentLang={lang} />
+        </div>
+      </div>
+
+      <!-- 移动端汉堡按钮 -->
+      <div class="md:hidden flex items-center gap-2">
+        <ThemeToggle client:load />
+        <LangToggle client:load currentPath={currentPath} currentLang={lang} />
+        <button
+          id="hamburger"
+          class="p-2 rounded-btn hover:bg-[var(--color-card-border)] transition-colors duration-300"
+          aria-label="菜单"
+          onclick="document.getElementById('mobile-menu')?.classList.toggle('hidden')"
+        >
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 移动端下拉菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4">
+      <div class="flex flex-col gap-2">
+        {links.map((link) => (
+          <a
+            href={link.href}
+            class={`px-3 py-2 rounded-btn text-sm transition-colors duration-300 ${
+              isActive(link.href)
+                ? 'bg-[var(--color-card-border)] text-[var(--color-primary)] font-medium'
+                : 'text-[var(--color-text-muted)] hover:bg-[var(--color-card-border)]'
+            }`}
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</nav>
