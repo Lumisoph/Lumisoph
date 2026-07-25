@@ -50,8 +50,6 @@ export default function LyricsBackground({ lrcPath }: Props) {
       const t = (e as CustomEvent).detail as number;
       // 时间归零 = 停止，不做显示
       if (t <= 0) return;
-      // 无歌词文本的空行跳过
-      if (lyrics[i] && !lyrics[i].text) return;
       let i = -1;
       for (let j = 0; j < lyrics.length; j++) {
         if (lyrics[j].time <= t) i = j; else break;
