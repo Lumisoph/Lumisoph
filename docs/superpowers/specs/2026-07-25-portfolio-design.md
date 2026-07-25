@@ -27,11 +27,13 @@
 /zh/blog        → 中文博客列表
 /zh/blog/[slug] → 中文文章详情
 /zh/contact     → 中文联系页
+/zh/photos      → 中文照片墙
 /en/            → 英文首页
 /en/projects    → 英文项目页
 /en/blog        → 英文博客列表
 /en/blog/[slug] → 英文文章详情
 /en/contact     → 英文联系页
+/en/photos      → 英文照片墙
 ```
 
 ## 目录结构
@@ -46,6 +48,7 @@ src/
 │   │   ├── blog/
 │   │   │   ├── index.astro
 │   │   │   └── [slug].astro
+│   │   ├── photos.astro
 │   │   └── contact.astro
 │   └── en/
 │       ├── index.astro
@@ -53,6 +56,7 @@ src/
 │       ├── blog/
 │       │   ├── index.astro
 │       │   └── [slug].astro
+│       ├── photos.astro
 │       └── contact.astro
 ├── i18n/
 │   ├── zh.ts
@@ -64,12 +68,14 @@ src/
 │   ├── LogoWall.astro
 │   ├── ProjectCard.astro
 │   ├── BlogCard.astro
+│   ├── PhotoWall.astro
 │   └── ContactForm.astro
 ├── react/
 │   ├── ThemeToggle.tsx
 │   ├── LangToggle.tsx
 │   ├── BackgroundEffect.tsx
-│   └── SpotifyEmbed.tsx
+│   ├── SpotifyEmbed.tsx
+│   └── PhotoWallMasonry.tsx
 ├── content/
 │   ├── projects/
 │   │   ├── zh/
@@ -87,7 +93,7 @@ src/
 
 ### 共享组件
 
-- **导航栏**：Logo/名字（左），页面链接（首页/项目/博客/联系），语言切换按钮，主题切换按钮（右）。移动端折叠为汉堡菜单。滚动固定顶部。
+- **导航栏**：Logo/名字（左），页面链接（首页/项目/博客/照片墙/联系），语言切换按钮，主题切换按钮（右）。移动端折叠为汉堡菜单。滚动固定顶部。
 - **页脚**：版权信息 + 社交链接 + Spotify 专辑嵌入播放器
 
 ### 首页
@@ -107,6 +113,12 @@ src/
 - 卡片列表布局，每张卡片：封面图、标题、日期、摘要
 - 文章详情页：Markdown 全文渲染
 - 数据来自 `content/blog/{zh,en}/` Markdown 文件
+
+### 照片墙
+
+- 瀑布流/Masonry 网格布局
+- 照片存放在 `public/images/photos/`
+- React 组件实现瀑布流排列和图片灯箱（点击放大）
 
 ### 联系页
 
@@ -170,3 +182,4 @@ src/
 - 社交链接
 - Spotify 专辑/播放列表 ID
 - Formspree 表单 endpoint
+- 照片墙图片（放入 `public/images/photos/`）
