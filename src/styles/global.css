@@ -10,11 +10,11 @@
 :root {
   --color-primary: #7EC8E3;
   --color-accent: #E76F51;
-  --color-bg: #FFFAF5;
+  --color-bg: #F0F6FA;
   --color-card: #FFFFFF;
-  --color-card-border: rgba(126, 200, 227, 0.15);
-  --color-text: #2D1B1E;
-  --color-text-muted: #6B5B5E;
+  --color-card-border: rgba(126, 200, 227, 0.2);
+  --color-text: #1a2a33;
+  --color-text-muted: #5a7a8a;
 }
 
 .dark {
@@ -32,8 +32,39 @@ html {
 }
 
 body {
-  background-color: var(--color-bg);
   color: var(--color-text);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-height: 100vh;
+  position: relative;
+}
+
+/* 全站背景图 + 半透明遮罩 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: url('/images/day.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.dark body::before {
+  background-image: url('/images/night.jpg');
+}
+
+/* 背景图上的遮罩层 — 保证文字可读 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(240, 246, 250, 0.75);
+  transition: background 0.5s ease-in-out;
+}
+
+.dark body::after {
+  background: rgba(13, 15, 19, 0.8);
 }
