@@ -29,42 +29,54 @@
 
 html {
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  background-color: var(--color-bg);
 }
 
 body {
   color: var(--color-text);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-height: 100vh;
-  position: relative;
 }
 
-/* 全站背景图 + 半透明遮罩 */
-body::before {
-  content: '';
+/* 背景图 — 居中卡片式呈现，适应不同宽高比 */
+.bg-frame {
   position: fixed;
   inset: 0;
   z-index: -2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.bg-frame::before {
+  content: '';
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  height: calc(100vh - 64px);
+  border-radius: 16px;
+  overflow: hidden;
   background-image: url('/images/day.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  transition: opacity 0.5s ease-in-out;
+  box-shadow: 0 4px 40px rgba(126, 200, 227, 0.15);
+  transition: background-image 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
 }
 
-.dark body::before {
+.dark .bg-frame::before {
   background-image: url('/images/night.jpg');
+  box-shadow: 0 4px 40px rgba(233, 196, 106, 0.1);
 }
 
-/* 背景图上的遮罩层 — 保证文字可读 */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: rgba(240, 246, 250, 0.75);
-  transition: background 0.5s ease-in-out;
-}
-
-.dark body::after {
-  background: rgba(13, 15, 19, 0.8);
+/* 手机端缩小卡片边距 */
+@media (max-width: 767px) {
+  .bg-frame {
+    padding: 8px;
+  }
+  .bg-frame::before {
+    height: calc(100vh - 32px);
+    border-radius: 12px;
+  }
 }
