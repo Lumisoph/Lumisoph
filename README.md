@@ -12,7 +12,7 @@
 
 ## About Me
 
-I am an undergraduate student in Software Engineering at Northwest University.
+I am an undergraduate student in Software Engineering.
 
 My previous research focuses on extracting capability-related evidence from
 learning and problem-solving processes, including competency profiling,
