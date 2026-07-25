@@ -60,6 +60,7 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
     if (playing) {
       audio.pause();
       setPlaying(false);
+      window.dispatchEvent(new CustomEvent('music-pause'));
     } else {
       audio.play().then(() => setPlaying(true)).catch(() => {});
     }
@@ -73,6 +74,7 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
     setPlaying(false);
     setExpanded(false);
     sessionStorage.setItem('music-time', '0');
+    window.dispatchEvent(new CustomEvent('music-pause'));
   }, []);
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
@@ -99,7 +101,10 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
         onEnded={stop}
         onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
+        onPause={() => {
+          setPlaying(false);
+          window.dispatchEvent(new CustomEvent('music-pause'));
+        }}
       />
 
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
