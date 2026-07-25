@@ -62,6 +62,6 @@ const en: I18nDict = {
     description: 'The page you are looking for does not exist',
     backHome: 'Back to Home',
   },
-} as const;
+};
 
 export default en;

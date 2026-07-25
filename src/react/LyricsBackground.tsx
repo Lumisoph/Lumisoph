@@ -81,8 +81,6 @@ export default function LyricsBackground({ lrcPath }: Props) {
 
   if (lineIndex < 0) return <RicePaper />;
 
-  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
-
   return (
     <>
       <RicePaper />

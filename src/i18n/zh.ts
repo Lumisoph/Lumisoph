@@ -60,7 +60,7 @@ const zh = {
     description: '你访问的页面不存在',
     backHome: '返回首页',
   },
-} as const;
+};
 
 export default zh;
 export type I18nDict = typeof zh;

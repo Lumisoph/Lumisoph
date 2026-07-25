@@ -16,7 +16,8 @@ const { lang, socialLinks = [] } = Astro.props;
 const t = getI18n(lang);
 ---
 
-<footer class="border-t border-[var(--color-card-border)] mt-auto">
+<footer class="mt-auto">
+  <div class="gradient-line mb-10"></div>
   <div class="max-w-6xl mx-auto px-4 py-10">
     {/* 社交链接 */}
     {socialLinks.length > 0 && (

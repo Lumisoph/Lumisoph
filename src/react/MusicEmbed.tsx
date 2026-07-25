@@ -16,8 +16,6 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  if (!audioSrc) return null;
-
   // 跨页面恢复播放
   useEffect(() => {
     const audio = audioRef.current;
@@ -70,6 +68,8 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
     const sec = Math.floor(s % 60);
     return `${m}:${sec.toString().padStart(2, '0')}`;
   };
+
+  if (!audioSrc) return null;
 
   return (
     <>

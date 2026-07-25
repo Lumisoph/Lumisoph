@@ -24,7 +24,7 @@ const isActive = (href: string) => {
 
 ---
 
-<nav class="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-bg)]/80 border-b border-[var(--color-card-border)]">
+<nav class="sticky top-0 z-50 glass-nav">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16 relative">
       <!-- Logo -->
@@ -37,9 +37,9 @@ const isActive = (href: string) => {
         {links.map((link) => (
           <a
             href={link.href}
-            class={`text-sm transition-colors duration-300 ${
+            class={`text-sm transition-all duration-300 tracking-wide ${
               isActive(link.href)
-                ? 'text-[var(--color-primary)] font-medium'
+                ? 'text-[var(--color-primary)] font-semibold nav-active'
                 : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
             }`}
           >
