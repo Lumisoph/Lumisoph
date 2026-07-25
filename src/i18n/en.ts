@@ -2,20 +2,21 @@ import type { I18nDict } from './zh';
 
 const en: I18nDict = {
   site: {
-    title: "Hi, I'm Lumisoph 👋",
-    description: 'Exploring how LLM agents diagnose failures, accumulate experience, and evolve reusable capabilities.',
+    title: 'Lumisoph - Personal Homepage',
+    description: 'Welcome to Lumisoph\'s personal homepage',
   },
   nav: {
     home: 'Home',
     projects: 'Projects',
     blog: 'Blog',
     photos: 'Photos',
+    contact: 'Contact',
   },
   home: {
     greeting: "Hi, I'm",
-    name: 'Lumisoph 👋',
-    tagline: 'Exploring how LLM agents diagnose failures, accumulate experience, and evolve reusable capabilities.',
-    intro: 'LLM Agents · Tool Use · Memory · Capability Diagnosis · Skill Evolution',
+    name: 'Lumisoph',
+    tagline: '',
+    intro: '',
     cta: 'View My Work',
   },
   projects: {
@@ -34,6 +35,17 @@ const en: I18nDict = {
   photos: {
     title: 'Photo Wall',
     description: 'Beautiful moments in life',
+  },
+  contact: {
+    title: 'Contact Me',
+    description: 'Have questions or want to collaborate? Feel free to reach out.',
+    name: 'Name',
+    email: 'Email',
+    message: 'Message',
+    send: 'Send',
+    sending: 'Sending...',
+    success: 'Message sent successfully! Thank you.',
+    error: 'Failed to send. Please try again later.',
   },
   footer: {
     copyright: '© 2026 Lumisoph. All rights reserved.',

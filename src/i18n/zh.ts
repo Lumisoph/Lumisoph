@@ -1,6 +1,6 @@
 const zh = {
   site: {
-    title: "Hi, I'm Lumisoph 👋",
+    title: "Lumisoph",
     description: '探索 LLM 智能体如何诊断故障、积累经验，并演化可复用的能力。',
   },
   nav: {
@@ -10,8 +10,8 @@ const zh = {
     photos: '照片墙',
   },
   home: {
-    greeting: "Hi, I'm",
-    name: 'Lumisoph 👋',
+    greeting: "Hi, welcome to my personal website, I'm",
+    name: 'Lumisoph',
     tagline: '探索 LLM 智能体如何诊断故障、积累经验，并演化可复用的能力。',
     intro: 'LLM 智能体 · 工具使用 · 记忆 · 能力诊断 · 技能演化',
     cta: '查看作品',
