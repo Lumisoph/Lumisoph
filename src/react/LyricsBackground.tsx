@@ -87,13 +87,10 @@ export default function LyricsBackground({ lrcPath }: Props) {
 
       {/* 左右双栏歌词 */}
       <div className="fixed inset-0 pointer-events-none select-none overflow-hidden" style={{ zIndex: -1 }}>
-        <div className="h-full max-w-6xl mx-auto flex items-center justify-center gap-16 md:gap-24 px-8">
+        <div className="h-full max-w-6xl mx-auto flex items-center justify-center gap-24 md:gap-40 px-8">
           {/* 左栏 — 当前句 */}
           <div className="flex-1 text-right">
             <div className="inline-block max-w-xs">
-              <p className="text-[10px] tracking-[0.3em] text-[var(--color-text-muted)]/30 mb-2 font-sans">
-                當 前
-              </p>
               <p
                 className="text-2xl md:text-4xl font-bold leading-relaxed tracking-[0.15em]"
                 style={{
@@ -130,9 +127,6 @@ export default function LyricsBackground({ lrcPath }: Props) {
           <div className="flex-1 text-left">
             {nextLine && (
               <div className="inline-block max-w-xs">
-                <p className="text-[10px] tracking-[0.3em] text-[var(--color-text-muted)]/30 mb-2 font-sans">
-                  即 將
-                </p>
                 <p
                   className="text-lg md:text-2xl font-normal leading-relaxed tracking-[0.12em]"
                   style={{
