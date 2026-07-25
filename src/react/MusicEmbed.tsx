@@ -77,7 +77,11 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
         ref={audioRef}
         src={audioSrc}
         preload="auto"
-        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+        onTimeUpdate={(e) => {
+          const t = e.currentTarget.currentTime;
+          setCurrentTime(t);
+          window.dispatchEvent(new CustomEvent('music-tick', { detail: t }));
+        }}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
         onEnded={stop}
         onPlay={() => setPlaying(true)}

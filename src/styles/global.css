@@ -40,7 +40,7 @@ body {
 .bg-frame {
   position: fixed;
   inset: 0;
-  z-index: -2;
+  z-index: -3;
   background-image: url('/images/day.jpg');
   background-size: cover;
   background-position: center;
@@ -57,9 +57,9 @@ body::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   backdrop-filter: blur(2px);
-  background: rgba(232, 241, 248, 0.82);
+  background: rgba(232, 241, 248, 0.78);
   transition: background 0.5s ease-in-out;
 }
 

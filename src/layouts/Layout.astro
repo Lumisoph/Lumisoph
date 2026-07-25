@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { ViewTransitions } from 'astro:transitions';
 import MusicEmbed from '../react/MusicEmbed';
+import LyricsBackground from '../react/LyricsBackground';
 
 export interface Props {
   lang: 'zh' | 'en';
@@ -46,7 +47,9 @@ const {
     </script>
     <!-- 背景图 -->
     <div class="bg-frame"></div>
-    <!-- 全局音乐悬浮小插件 -->
+    <!-- 歌词背景特效 -->
+    <LyricsBackground client:load lrcPath="/music/鲜克 - 南墙小子.lrc" />
+    <!-- 全局音乐 -->
     <MusicEmbed client:load
       audioSrc="/music/鲜克 - 南墙小子.mp3"
       coverSrc="/music/鲜克 - 南墙小子.jpg"
