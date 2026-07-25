@@ -2,8 +2,8 @@ import type { I18nDict } from './zh';
 
 const en: I18nDict = {
   site: {
-    title: 'Lumisoph - Personal Homepage',
-    description: 'Welcome to Lumisoph\'s personal homepage',
+    title: "Hi, I'm Lumisoph 👋",
+    description: 'Exploring how LLM agents diagnose failures, accumulate experience, and evolve reusable capabilities.',
   },
   nav: {
     home: 'Home',
@@ -13,9 +13,9 @@ const en: I18nDict = {
   },
   home: {
     greeting: "Hi, I'm",
-    name: 'Lumisoph',
-    tagline: '',
-    intro: '',
+    name: 'Lumisoph 👋',
+    tagline: 'Exploring how LLM agents diagnose failures, accumulate experience, and evolve reusable capabilities.',
+    intro: 'LLM Agents · Tool Use · Memory · Capability Diagnosis · Skill Evolution',
     cta: 'View My Work',
   },
   projects: {

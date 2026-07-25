@@ -1,6 +1,5 @@
 ---
 import { getI18n } from '../i18n/utils';
-import MusicEmbed from '../react/MusicEmbed';
 
 interface SocialLink {
   name: string;
@@ -11,25 +10,14 @@ interface SocialLink {
 interface Props {
   lang: string;
   socialLinks?: SocialLink[];
-  /** 网易云音乐 ID，不填则不显示播放器 */
-  musicId?: string;
-  /** 0=歌单, 1=专辑, 2=单曲 */
-  musicType?: number;
 }
 
-const { lang, socialLinks = [], musicId, musicType = 0 } = Astro.props;
+const { lang, socialLinks = [] } = Astro.props;
 const t = getI18n(lang);
 ---
 
 <footer class="border-t border-[var(--color-card-border)] mt-auto">
-  <div class="max-w-6xl mx-auto px-4 py-12">
-    {/* 网易云音乐嵌入 */}
-    {musicId && (
-      <div class="mb-8">
-        <MusicEmbed client:load musicId={musicId} type={musicType} />
-      </div>
-    )}
-
+  <div class="max-w-6xl mx-auto px-4 py-10">
     {/* 社交链接 */}
     {socialLinks.length > 0 && (
       <div class="flex justify-center gap-4 mb-6">

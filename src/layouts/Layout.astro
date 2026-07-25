@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ViewTransitions } from 'astro:transitions';
 
 export interface Props {
   lang: 'zh' | 'en';
@@ -10,8 +11,8 @@ export interface Props {
 
 const {
   lang,
-  title = 'Lumisoph',
-  description = '欢迎来到 Lumisoph 的个人主页',
+  title = "Hi, I'm Lumisoph 👋",
+  description = '探索 LLM 智能体如何诊断故障、积累经验，并演化可复用的能力。',
   image = '/profile.jpg',
 } = Astro.props;
 ---
@@ -28,6 +29,7 @@ const {
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ViewTransitions />
     <title>{title}</title>
   </head>
   <body>
