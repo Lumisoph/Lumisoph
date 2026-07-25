@@ -16,10 +16,18 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // 跨页面恢复播放
+  // 跨页面恢复播放 + 获取时长
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+
+    // 读取已缓存的时长
+    if (audio.duration && !isNaN(audio.duration)) {
+      setDuration(audio.duration);
+    }
+    // 若尚未加载 metadata，监听一次
+    const onMeta = () => setDuration(audio.duration);
+    audio.addEventListener('loadedmetadata', onMeta, { once: true });
 
     const saved = sessionStorage.getItem('music-time');
     if (saved) audio.currentTime = parseFloat(saved);
@@ -33,7 +41,10 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
       sessionStorage.setItem('music-playing', String(playing));
     };
     window.addEventListener('beforeunload', saveTime);
-    return () => window.removeEventListener('beforeunload', saveTime);
+    return () => {
+      window.removeEventListener('beforeunload', saveTime);
+      audio.removeEventListener('loadedmetadata', onMeta);
+    };
   }, []);
 
   useEffect(() => {
@@ -136,7 +147,7 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
               </div>
               <div className="flex justify-between mt-1">
                 <span className="text-[10px] text-[var(--color-text-muted)]">{fmt(currentTime)}</span>
-                <span className="text-[10px] text-[var(--color-text-muted)]">{fmt(duration)}</span>
+                <span className="text-[10px] text-[var(--color-text-muted)]">{duration > 0 ? fmt(duration) : '--:--'}</span>
               </div>
             </div>
 

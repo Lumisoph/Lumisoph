@@ -69,7 +69,7 @@ export default function LyricsBackground({ lrcPath }: Props) {
       setCharCount(0);
       const text = lyrics[lineIndex]?.text ?? '';
       if (!text) return;
-      const interval = Math.max(90, 1400 / text.length);
+      const interval = Math.max(150, 3600 / text.length);
       let c = 0;
       const timer = setInterval(() => { c++; setCharCount(c); if (c >= text.length) clearInterval(timer); }, interval);
       return () => clearInterval(timer);
