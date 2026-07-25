@@ -2,6 +2,7 @@
 import { getI18n } from '../i18n/utils';
 import ThemeToggle from '../react/ThemeToggle';
 import LangToggle from '../react/LangToggle';
+
 interface Props {
   lang: 'zh' | 'en';
   currentPath: string;
@@ -9,30 +10,30 @@ interface Props {
 
 const { lang, currentPath } = Astro.props;
 const t = getI18n(lang);
+const base = import.meta.env.BASE_URL;
 
 const links = [
-  { href: `/${lang}/`, label: t.nav.home },
-  { href: `/${lang}/projects`, label: t.nav.projects },
-  { href: `/${lang}/blog`, label: t.nav.blog },
-  { href: `/${lang}/photos`, label: t.nav.photos },
+  { href: `${base}${lang}/`, label: t.nav.home },
+  { href: `${base}${lang}/projects`, label: t.nav.projects },
+  { href: `${base}${lang}/blog`, label: t.nav.blog },
+  { href: `${base}${lang}/photos`, label: t.nav.photos },
 ];
 
 const isActive = (href: string) => {
-  if (href === `/${lang}/`) return currentPath === `/${lang}/`;
-  return currentPath.startsWith(href);
+  return currentPath.startsWith(`/${lang}/`) && href.includes(`/${lang}/`);
 };
 
+const targetLang = lang === 'zh' ? 'en' : 'zh';
+const langHref = `${base}${targetLang}/${currentPath.replace(/^\/(zh|en)\//, '')}`;
 ---
 
 <nav class="sticky top-0 z-50 glass-nav">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16 relative">
-      <!-- Logo -->
-      <a href={`/${lang}/`} class="text-lg font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-300">
+      <a href={`${base}${lang}/`} class="text-lg font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-300">
         {t.home.name}
       </a>
 
-      <!-- 桌面端链接 -->
       <div class="hidden md:flex items-center gap-6">
         {links.map((link) => (
           <a
@@ -48,11 +49,10 @@ const isActive = (href: string) => {
         ))}
         <div class="flex items-center gap-2">
           <ThemeToggle client:load />
-          <LangToggle client:load currentPath={currentPath} currentLang={lang} />
+          <LangToggle client:load href={langHref} label={targetLang === 'zh' ? '中文' : 'EN'} />
         </div>
       </div>
 
-      <!-- 移动端 -->
       <div class="md:hidden flex items-center gap-2">
         <ThemeToggle client:load />
         <LangToggle client:load currentPath={currentPath} currentLang={lang} />
@@ -69,7 +69,6 @@ const isActive = (href: string) => {
       </div>
     </div>
 
-    <!-- 移动端下拉菜单 -->
     <div id="mobile-menu" class="hidden md:hidden pb-4">
       <div class="flex flex-col gap-2">
         {links.map((link) => (

@@ -10,11 +10,13 @@ export interface Props {
   image?: string;
 }
 
+const base = import.meta.env.BASE_URL;
+
 const {
   lang,
   title = "Hi, I'm Lumisoph 👋",
   description = '探索 LLM 智能体如何诊断故障、积累经验，并演化可复用的能力。',
-  image = '/profile.jpg',
+  image = `${base}profile.jpg`,
 } = Astro.props;
 ---
 
@@ -29,7 +31,7 @@ const {
     <meta property="og:image" content={image} />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <title>{title}</title>
@@ -43,14 +45,12 @@ const {
         }
       })();
     </script>
-    <!-- 背景图 -->
-    <div class="bg-frame"></div>
-    <!-- 歌词背景特效 -->
-    <LyricsBackground client:load lrcPath="/music/鲜克 - 南墙小子.lrc" />
-    <!-- 全局音乐 -->
+    <div class="bg-frame" style={`background-image:url(${base}images/day.jpg)`}></div>
+    <style set:html>{`.dark .bg-frame{background-image:url(${base}images/night.jpg)}`}</style>
+    <LyricsBackground client:load lrcPath={`${base}music/鲜克 - 南墙小子.lrc`} />
     <MusicEmbed client:load
-      audioSrc="/music/鲜克 - 南墙小子.mp3"
-      coverSrc="/music/鲜克 - 南墙小子.jpg"
+      audioSrc={`${base}music/鲜克 - 南墙小子.mp3`}
+      coverSrc={`${base}music/鲜克 - 南墙小子.jpg`}
       title="南墙小子"
       artist="鲜克"
     />

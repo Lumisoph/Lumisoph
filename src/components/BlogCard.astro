@@ -33,7 +33,7 @@ const slug = post.id.replace(/^(zh|en)\//, '');
       </div>
     )}
 
-    <a href={`/${lang}/blog/${slug}`}
+    <a href={`${import.meta.env.BASE_URL}${lang}/blog/${slug}`}
        class="text-sm font-medium text-[var(--color-primary)] hover:underline underline-offset-4 transition-all duration-300">
       {t.blog.readMore} →
     </a>

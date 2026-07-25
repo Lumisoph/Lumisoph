@@ -52,22 +52,6 @@ body {
 }
 
 /* 背景图 */
-.bg-frame {
-  position: fixed;
-  inset: 0;
-  z-index: -3;
-  background-image: url('/images/day.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transition: background-image 0.6s ease;
-  filter: saturate(0.85);
-}
-
-.dark .bg-frame {
-  background-image: url('/images/night.jpg');
-  filter: saturate(0.7) brightness(0.6);
-}
 
 /* 背景遮罩 */
 body::after {
@@ -84,6 +68,21 @@ body::after {
 .dark body::after {
   background:
     linear-gradient(180deg, rgba(9, 11, 15, 0.65) 0%, rgba(9, 11, 15, 0.88) 40%, rgba(9, 11, 15, 0.94) 100%);
+}
+
+.bg-frame {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 0.6s ease;
+  filter: saturate(0.85);
+}
+
+.dark .bg-frame {
+  filter: saturate(0.7) brightness(0.6);
 }
 
 /* 全局卡片基底 */

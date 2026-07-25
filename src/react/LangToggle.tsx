@@ -1,19 +1,17 @@
 interface Props {
-  currentPath: string;
-  currentLang: string;
+  href: string;
+  label: string;
 }
 
-export default function LangToggle({ currentPath, currentLang }: Props) {
-  const targetLang = currentLang === 'zh' ? 'en' : 'zh';
-  const targetPath = currentPath.replace(/^\/(zh|en)/, `/${targetLang}`);
+export default function LangToggle({ href, label }: Props) {
 
   return (
     <a
-      href={targetPath}
+      href={href}
       className="px-3 py-1.5 rounded-btn text-sm font-medium transition-colors duration-300
                  border border-[var(--color-card-border)] hover:bg-[var(--color-card-border)]"
     >
-      {targetLang === 'zh' ? '中文' : 'EN'}
+      {label}
     </a>
   );
 }

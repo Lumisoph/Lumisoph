@@ -24,7 +24,7 @@ const currentPath = `/en/blog/${post.id.replace(/^en\//, '')}`;
 <Layout lang={lang} title={`${post.data.title} - ${t.site.title}`} description={post.data.description}>
   <Nav lang={lang} currentPath={currentPath} />
   <main class="max-w-3xl mx-auto px-4 py-16">
-    <a href={`/${lang}/blog`} class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)]
+    <a href={`${import.meta.env.BASE_URL}${lang}/blog`} class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)]
               hover:text-[var(--color-primary)] transition-colors duration-300 mb-8">
       &larr; {t.blog.backToList}
     </a>
