@@ -36,12 +36,14 @@ const {
   </head>
   <body>
     <script is:inline>
-      // 防止页面加载时的主题闪烁
+      // 防止页面加载时的主题闪烁，跨页面保持一致
       (function() {
-        const saved = localStorage.getItem('theme');
-        const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var saved = localStorage.getItem('theme');
+        var prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (saved === 'dark' || (!saved && prefers)) {
           document.documentElement.classList.add('dark');
+        } else if (saved === 'light') {
+          document.documentElement.classList.remove('dark');
         }
       })();
     </script>
