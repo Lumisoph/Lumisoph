@@ -20,7 +20,6 @@ function parseLRC(raw: string): LyricLine[] {
   return lines;
 }
 
-/** 宣纸纹理 */
 function RicePaper() {
   return (
     <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1, background: `
@@ -36,6 +35,8 @@ export default function LyricsBackground({ lrcPath }: Props) {
   const [lineIndex, setLineIndex] = useState(-1);
   const [charCount, setCharCount] = useState(0);
   const [phase, setPhase] = useState<'ink' | 'dry'>('ink');
+  // 当前句显示在哪一侧，每次换行交替
+  const [side, setSide] = useState<'left' | 'right'>('left');
   const prevIndex = useRef(-1);
   const keyRef = useRef(0);
 
@@ -57,11 +58,12 @@ export default function LyricsBackground({ lrcPath }: Props) {
     return () => window.removeEventListener('music-tick', onTick);
   }, [lyrics]);
 
-  // 逐字浮现 + 水墨晕染
+  // 换行时交替方向 + 逐字动画
   useEffect(() => {
-    if (lineIndex !== prevIndex.current) {
+    if (lineIndex !== prevIndex.current && lineIndex >= 0) {
       prevIndex.current = lineIndex;
       keyRef.current++;
+      setSide(s => s === 'left' ? 'right' : 'left');
       setCharCount(0);
       setPhase('ink');
       const text = lyrics[lineIndex]?.text ?? '';
@@ -73,7 +75,6 @@ export default function LyricsBackground({ lrcPath }: Props) {
         setCharCount(c);
         if (c >= text.length) {
           clearInterval(timer);
-          // 全部字显现后，等一小段时间再"墨干"
           setTimeout(() => setPhase('dry'), 400);
         }
       }, interval);
@@ -92,24 +93,23 @@ export default function LyricsBackground({ lrcPath }: Props) {
     textOrientation: 'upright',
   };
 
+  // 当前句是大字侧，下一句是小字侧
+  const bigSide = side;
+  const smallSide = side === 'left' ? 'right' : 'left';
+
   return (
     <>
-      {/* 水墨晕染 SVG 滤镜 */}
       <svg width="0" height="0" className="absolute">
         <defs>
           <filter id="ink-wash" x="-20%" y="-20%" width="140%" height="140%">
-            {/* 基础噪波 — 模拟宣纸纹理 */}
             <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" result="displaced" />
-            {/* 高斯模糊 — 墨迹湿润感 */}
             <feGaussianBlur in="displaced" stdDeviation="1.5" result="blurred" />
-            {/* 混合 — 保留原文字尖锐度，边缘晕染 */}
             <feMerge>
               <feMergeNode in="blurred" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          {/* 墨干后的轻微纹理 */}
           <filter id="ink-dry" x="-10%" y="-10%" width="120%" height="120%">
             <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" result="noise" />
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.2" xChannelSelector="R" yChannelSelector="G" />
@@ -122,55 +122,70 @@ export default function LyricsBackground({ lrcPath }: Props) {
       <div className="fixed inset-0 pointer-events-none select-none overflow-hidden" style={{ zIndex: -1 }}>
         <div className="h-full max-w-5xl mx-auto flex items-center justify-between px-8">
 
-          {/* 左联 — 当前句 */}
-          <div key={`L-${keyRef.current}`} className="animate-[slideFromLeft_0.8s_ease-out]">
+          {/* 左栏 */}
+          <div key={`L-${keyRef.current}`} className={bigSide === 'left' ? 'animate-[slideFromLeft_0.6s_ease-out]' : ''}>
             <p
-              className="text-2xl md:text-4xl font-black tracking-[0.3em] leading-loose transition-all duration-700"
+              className={`transition-all duration-700 leading-loose tracking-[0.3em] font-black
+                ${bigSide === 'left' ? 'text-2xl md:text-4xl' : 'text-lg md:text-xl opacity-5'}`}
               style={{
                 ...lineStyle,
                 color: 'var(--color-text)',
-                opacity: phase === 'ink' ? 0.14 : 0.2,
-                filter: phase === 'ink' ? 'url(#ink-wash)' : 'url(#ink-dry)',
-                textShadow: phase === 'ink'
-                  ? '0 0 60px var(--color-primary), 0 0 120px rgba(139,90,43,0.3), 2px 2px 4px rgba(100,60,20,0.15)'
-                  : '1px 1px 2px rgba(139,90,43,0.12), 0 0 30px var(--color-primary)',
+                opacity: bigSide === 'left' ? (phase === 'ink' ? 0.16 : 0.22) : 0.05,
+                filter: bigSide === 'left' ? (phase === 'ink' ? 'url(#ink-wash)' : 'url(#ink-dry)') : 'url(#ink-dry)',
+                textShadow: bigSide === 'left'
+                  ? (phase === 'ink'
+                    ? '0 0 60px var(--color-primary), 0 0 120px rgba(139,90,43,0.3)'
+                    : '1px 1px 2px rgba(139,90,43,0.12), 0 0 30px var(--color-primary)')
+                  : '0 0 10px var(--color-primary)',
               }}
             >
-              {currentLine.slice(0, charCount)}
-              {charCount < currentLine.length && (
+              {bigSide === 'left'
+                ? currentLine.slice(0, charCount)
+                : nextLine}
+              {bigSide === 'left' && charCount < currentLine.length && (
                 <span className="inline-block w-[2px] h-[0.7em] bg-[var(--color-primary)]/40 animate-pulse" />
               )}
             </p>
           </div>
 
-          {/* 右联 — 下一句 */}
-          {nextLine && (
-            <div key={`R-${keyRef.current}`} className="animate-[slideFromRight_0.8s_ease-out]">
-              <p
-                className="text-lg md:text-2xl font-normal tracking-[0.2em] leading-loose"
-                style={{
-                  ...lineStyle,
-                  color: 'var(--color-text)',
-                  opacity: 0.07,
-                  filter: 'url(#ink-dry)',
-                  textShadow: '0 0 16px var(--color-primary)',
-                }}
-              >
-                {nextLine}
-              </p>
-            </div>
-          )}
+          {/* 右栏 */}
+          <div key={`R-${keyRef.current}`} className={bigSide === 'right' ? 'animate-[slideFromRight_0.6s_ease-out]' : ''}>
+            <p
+              className={`transition-all duration-700 leading-loose
+                ${bigSide === 'right'
+                  ? 'text-2xl md:text-4xl font-black tracking-[0.3em]'
+                  : 'text-lg md:text-xl font-normal tracking-[0.2em]'}`}
+              style={{
+                ...lineStyle,
+                color: 'var(--color-text)',
+                opacity: bigSide === 'right' ? (phase === 'ink' ? 0.16 : 0.22) : 0.05,
+                filter: bigSide === 'right' ? (phase === 'ink' ? 'url(#ink-wash)' : 'url(#ink-dry)') : 'url(#ink-dry)',
+                textShadow: bigSide === 'right'
+                  ? (phase === 'ink'
+                    ? '0 0 60px var(--color-primary), 0 0 120px rgba(139,90,43,0.3)'
+                    : '1px 1px 2px rgba(139,90,43,0.12), 0 0 30px var(--color-primary)')
+                  : '0 0 10px var(--color-primary)',
+              }}
+            >
+              {bigSide === 'right'
+                ? currentLine.slice(0, charCount)
+                : nextLine}
+              {bigSide === 'right' && charCount < currentLine.length && (
+                <span className="inline-block w-[2px] h-[0.7em] bg-[var(--color-primary)]/40 animate-pulse" />
+              )}
+            </p>
+          </div>
 
         </div>
       </div>
 
       <style>{`
         @keyframes slideFromLeft {
-          0% { opacity: 0; transform: translateX(-100px); filter: blur(6px); }
+          0% { opacity: 0; transform: translateX(-80px); filter: blur(4px); }
           100% { opacity: 1; transform: translateX(0); filter: blur(0); }
         }
         @keyframes slideFromRight {
-          0% { opacity: 0; transform: translateX(100px); filter: blur(6px); }
+          0% { opacity: 0; transform: translateX(80px); filter: blur(4px); }
           100% { opacity: 1; transform: translateX(0); filter: blur(0); }
         }
         .dark p { text-shadow: 0 0 60px #D4B858, 0 0 120px rgba(212,184,88,0.25) !important; }
