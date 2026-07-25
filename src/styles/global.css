@@ -8,23 +8,21 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #7EC8E3;
-  --color-accent: #E76F51;
-  --color-bg: #F0F6FA;
-  --color-card: #FFFFFF;
-  --color-card-border: rgba(126, 200, 227, 0.2);
-  --color-text: #1a2a33;
-  --color-text-muted: #5a7a8a;
+  --color-primary: #5BA4C4;
+  --color-bg: #E8F1F8;
+  --color-card: rgba(255, 255, 255, 0.92);
+  --color-card-border: rgba(91, 164, 196, 0.18);
+  --color-text: #1B2833;
+  --color-text-muted: #4A6577;
 }
 
 .dark {
-  --color-primary: #E9C46A;
-  --color-accent: #F38C79;
-  --color-bg: #0D0F13;
-  --color-card: rgba(20, 22, 28, 0.85);
-  --color-card-border: rgba(233, 196, 106, 0.2);
-  --color-text: #F5F0E1;
-  --color-text-muted: #A09888;
+  --color-primary: #D4B04A;
+  --color-bg: #0A0C10;
+  --color-card: rgba(18, 20, 26, 0.9);
+  --color-card-border: rgba(212, 176, 74, 0.18);
+  --color-text: #EDE8DB;
+  --color-text-muted: #978F80;
 }
 
 html {
@@ -38,7 +36,7 @@ body {
   min-height: 100vh;
 }
 
-/* 全站背景图 — 铺满视口 */
+/* 背景图 */
 .bg-frame {
   position: fixed;
   inset: 0;
@@ -52,4 +50,19 @@ body {
 
 .dark .bg-frame {
   background-image: url('/images/night.jpg');
+}
+
+/* 背景遮罩 — 保证文字可读 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  backdrop-filter: blur(2px);
+  background: rgba(232, 241, 248, 0.82);
+  transition: background 0.5s ease-in-out;
+}
+
+.dark body::after {
+  background: rgba(10, 12, 16, 0.86);
 }
