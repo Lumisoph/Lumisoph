@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Hero from '../../components/Hero.astro';
-import LogoWall from '../../components/LogoWall.astro';
+import Skills from '../../components/Skills.astro';
 import Footer from '../../components/Footer.astro';
 import BackgroundEffect from '../../react/BackgroundEffect';
 import { getI18n } from '../../i18n/utils';
@@ -12,14 +12,24 @@ const t = getI18n(lang);
 const currentPath = '/en/';
 
 const socialLinks: { name: string; url: string; icon: string }[] = [];
-const logos: { src: string; alt: string }[] = [];
+
+const skillGroups = [
+  {
+    title: 'Algorithms & Methods',
+    items: ['NSGA-II', 'Multi-Objective Optimization', 'Clang AST', 'Tree Edit Distance', 'RAG', 'Multi-Agent Collaboration', 'LLM-as-Judge'],
+  },
+  {
+    title: 'Development',
+    items: ['Python', 'FastAPI', 'React', 'TypeScript', 'SQLAlchemy', 'Git', 'LaTeX'],
+  },
+];
 ---
 
 <Layout lang={lang} title={t.site.title} description={t.site.description}>
   <Nav lang={lang} currentPath={currentPath} />
   <main>
     <Hero currentPath={currentPath} socialLinks={socialLinks} />
-    <LogoWall logos={logos} />
+    <Skills groups={skillGroups} />
   </main>
   <Footer lang={lang} />
   <BackgroundEffect client:load />
