@@ -15,6 +15,7 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const wasPlaying = useRef(playing);
 
   // 跨页面恢复播放 + 获取时长
   useEffect(() => {
@@ -33,12 +34,13 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
     if (saved) audio.currentTime = parseFloat(saved);
 
     if (playing) {
-      audio.play().catch(() => setPlaying(false));
+      // 浏览器可能阻止跨页面自动播放，但不改变 UI 状态
+      audio.play().catch(() => {});
     }
 
     const saveTime = () => {
       sessionStorage.setItem('music-time', String(audio.currentTime));
-      sessionStorage.setItem('music-playing', String(playing));
+      sessionStorage.setItem('music-playing', String(wasPlaying.current));
     };
     window.addEventListener('beforeunload', saveTime);
     return () => {
@@ -48,6 +50,7 @@ export default function MusicEmbed({ audioSrc, coverSrc, title, artist }: Props)
   }, []);
 
   useEffect(() => {
+    wasPlaying.current = playing;
     sessionStorage.setItem('music-playing', String(playing));
   }, [playing]);
 
