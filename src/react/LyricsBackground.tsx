@@ -82,7 +82,6 @@ export default function LyricsBackground({ lrcPath }: Props) {
   }, [lineIndex]);
 
   const currentLine = lyrics[lineIndex]?.text ?? '';
-  const nextLine = lyrics[lineIndex + 1]?.text ?? '';
 
   if (lineIndex < 0) return <RicePaper />;
 
@@ -120,12 +119,12 @@ export default function LyricsBackground({ lrcPath }: Props) {
       <RicePaper />
 
       <div className="fixed inset-0 pointer-events-none select-none overflow-hidden" style={{ zIndex: -1 }}>
-        <div className="h-full flex items-center justify-center gap-[30px] md:gap-[60px] px-8">
+        <div className="h-full max-w-6xl mx-auto flex items-center px-8">
 
-          {/* 左联 — 当前句，水墨滑入 */}
-          <div key={`L-${keyRef.current}`} className="animate-[slideFromLeft_0.8s_ease-out]">
+          {/* 左联 — 当前句，从左侧水墨滑入 */}
+          <div key={keyRef.current} className="ml-[8%] md:ml-[12%] animate-[slideFromLeft_0.8s_ease-out]">
             <p
-              className={`text-2xl md:text-4xl font-black tracking-[0.3em] leading-loose transition-all duration-700`}
+              className="text-2xl md:text-4xl font-black tracking-[0.3em] leading-loose transition-all duration-700"
               style={{
                 ...lineStyle,
                 color: 'var(--color-text)',
@@ -143,42 +142,12 @@ export default function LyricsBackground({ lrcPath }: Props) {
             </p>
           </div>
 
-          {/* 中线 */}
-          <div className="w-px h-40 md:h-64 self-center"
-            style={{
-              background: 'linear-gradient(to bottom, transparent 5%, rgba(139,90,43,0.2) 20%, rgba(139,90,43,0.2) 80%, transparent 95%)',
-              filter: 'url(#ink-dry)',
-            }}
-          />
-
-          {/* 右联 — 下一句预览 */}
-          {nextLine && (
-            <div key={`R-${keyRef.current}`} className="animate-[slideFromRight_0.8s_ease-out]">
-              <p
-                className="text-lg md:text-2xl font-normal tracking-[0.25em] leading-loose"
-                style={{
-                  ...lineStyle,
-                  color: 'var(--color-text)',
-                  opacity: 0.07,
-                  filter: 'url(#ink-dry)',
-                  textShadow: '0 0 16px var(--color-primary)',
-                }}
-              >
-                {nextLine}
-              </p>
-            </div>
-          )}
-
         </div>
       </div>
 
       <style>{`
         @keyframes slideFromLeft {
           0% { opacity: 0; transform: translateX(-100px); filter: blur(6px); }
-          100% { opacity: 1; transform: translateX(0); filter: blur(0); }
-        }
-        @keyframes slideFromRight {
-          0% { opacity: 0; transform: translateX(100px); filter: blur(6px); }
           100% { opacity: 1; transform: translateX(0); filter: blur(0); }
         }
         .dark p { text-shadow: 0 0 60px #D4B858, 0 0 120px rgba(212,184,88,0.25) !important; }
