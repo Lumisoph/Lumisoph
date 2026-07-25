@@ -10,7 +10,6 @@ const en: I18nDict = {
     projects: 'Projects',
     blog: 'Blog',
     photos: 'Photos',
-    contact: 'Contact',
   },
   home: {
     greeting: "Hi, I'm",
@@ -35,17 +34,6 @@ const en: I18nDict = {
   photos: {
     title: 'Photo Wall',
     description: 'Beautiful moments in life',
-  },
-  contact: {
-    title: 'Contact Me',
-    description: 'Have questions or want to collaborate? Feel free to reach out.',
-    name: 'Name',
-    email: 'Email',
-    message: 'Message',
-    send: 'Send',
-    sending: 'Sending...',
-    success: 'Message sent successfully! Thank you.',
-    error: 'Failed to send. Please try again later.',
   },
   footer: {
     copyright: '© 2026 Lumisoph. All rights reserved.',
