@@ -87,7 +87,7 @@ export default function LyricsBackground({ lrcPath }: Props) {
   if (lineIndex < 0) return <RicePaper />;
 
   const lineStyle: React.CSSProperties = {
-    fontFamily: "'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif",
+    fontFamily: "'Ma Shan Zheng', 'Noto Serif SC', 'KaiTi', 'STKaiti', cursive",
     writingMode: 'vertical-rl',
     textOrientation: 'upright',
   };
