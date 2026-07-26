@@ -10,7 +10,8 @@ export default function FontSizeToggle() {
   const [idx, setIdx] = useState(() => {
     if (typeof window === 'undefined') return 0;
     const saved = localStorage.getItem('font-size');
-    return SIZES.findIndex((s) => s.key === saved);
+    const found = SIZES.findIndex((s) => s.key === saved);
+    return found >= 0 ? found : 0;
   });
 
   const apply = useCallback((i: number) => {
