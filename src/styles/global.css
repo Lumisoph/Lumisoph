@@ -2,7 +2,7 @@
 @import '@fontsource/inter/500.css';
 @import '@fontsource/inter/600.css';
 @import '@fontsource/inter/700.css';
-@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Long+Cang&family=ZCOOL+XiaoWei&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -192,6 +192,11 @@ body::after {
     0 0 0 4px var(--color-card),
     0 0 0 6px rgba(212, 184, 88, 0.2),
     0 8px 30px rgba(212, 184, 88, 0.15);
+}
+
+/* 行书字体 — 博客正文 */
+.font-running {
+  font-family: 'Long Cang', 'ZCOOL XiaoWei', 'KaiTi', 'STKaiti', serif;
 }
 
 /* 响应式字体 */
