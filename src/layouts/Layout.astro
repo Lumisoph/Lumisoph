@@ -43,6 +43,9 @@ const {
         if (s === 'dark' || (!s && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
           document.documentElement.classList.add('dark');
         }
+        var fs = localStorage.getItem('font-size');
+        if (fs === 'sm') document.documentElement.style.fontSize = '88%';
+        else if (fs === 'lg') document.documentElement.style.fontSize = '118%';
       })();
     </script>
     <div class="bg-frame" style={`background-image:url(${base}images/day.jpg)`}></div>
