@@ -199,7 +199,7 @@ body::after {
 
 /* 行书字体 — 博客正文 */
 .font-running {
-  font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', 'STSong', 'SimSun', serif;
+  font-family: 'STXingkai', '华文行楷', 'ZCOOL XiaoWei', 'KaiTi', 'STKaiti', serif;
 }
 
 /* 响应式字体 */
