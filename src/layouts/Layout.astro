@@ -44,8 +44,8 @@ const {
           document.documentElement.classList.add('dark');
         }
         var fs = localStorage.getItem('font-size');
-        if (fs === 'sm') document.documentElement.style.fontSize = '88%';
-        else if (fs === 'lg') document.documentElement.style.fontSize = '118%';
+        if (fs === 'sm') document.documentElement.classList.add('font-sm');
+        else if (fs === 'lg') document.documentElement.classList.add('font-lg');
       })();
     </script>
     <div class="bg-frame" style={`background-image:url(${base}images/day.jpg)`}></div>

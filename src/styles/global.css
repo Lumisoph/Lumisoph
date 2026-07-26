@@ -41,8 +41,10 @@
 html {
   transition: background-color 0.4s ease, color 0.4s ease;
   background-color: var(--color-bg);
-  font-size: 100%;
 }
+
+.font-sm { font-size: 85%; }
+.font-lg { font-size: 125%; }
 
 body {
   color: var(--color-text);
