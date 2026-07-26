@@ -4,6 +4,13 @@
 @import '@fontsource/inter/700.css';
 @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Long+Cang&family=ZCOOL+XiaoWei&display=swap');
 
+/* 华文行楷 — 自托管 */
+@font-face {
+  font-family: 'STXingkai';
+  src: url('/fonts/STXINGKA.TTF') format('truetype');
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
