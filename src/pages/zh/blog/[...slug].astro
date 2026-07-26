@@ -23,40 +23,87 @@ const currentPath = `/zh/blog/${post.id.replace(/^zh\//, '')}`;
 
 <Layout lang={lang} title={`${post.data.title} - ${t.site.title}`} description={post.data.description}>
   <Nav lang={lang} currentPath={currentPath} />
-  <main class="max-w-3xl mx-auto px-4 py-16">
-    <a href={`${import.meta.env.BASE_URL}${lang}/blog`} class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)]
-              hover:text-[var(--color-primary)] transition-colors duration-300 mb-8">
-      &larr; {t.blog.backToList}
+  <main class="max-w-2xl mx-auto px-6 py-20">
+    <!-- 返回链接 -->
+    <a href={`${import.meta.env.BASE_URL}${lang}/blog`
+      } class="inline-flex items-center gap-2 text-sm text-[var(--color-text-muted)]/60
+                hover:text-[var(--color-primary)] transition-colors duration-300 mb-16
+                tracking-wider uppercase text-[11px] font-medium">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      {t.blog.backToList}
     </a>
 
     <article>
-      <header class="mb-8">
-        <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-4">
+      <!-- 文章头 -->
+      <header class="mb-12 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-6 leading-tight tracking-tight">
           {post.data.title}
         </h1>
-        <time class="text-sm text-[var(--color-text-muted)]">
-          {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
-        </time>
-        {post.data.tags.length > 0 && (
-          <div class="flex flex-wrap gap-2 mt-3">
-            {post.data.tags.map((tag) => (
-              <span class="px-2 py-0.5 text-xs rounded-full bg-[var(--color-card-border)] text-[var(--color-text-muted)]">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+        <div class="flex items-center justify-center gap-3 text-sm text-[var(--color-text-muted)]/50">
+          <time datetime={post.data.date.toISOString()}>
+            {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+          {post.data.tags.length > 0 && (
+            <>
+              <span aria-hidden="true">·</span>
+              <div class="flex gap-2">
+                {post.data.tags.map((tag) => (
+                  <span class="text-xs">{tag}</span>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </header>
 
-      <div class="prose prose-lg dark:prose-invert max-w-none
-                  prose-headings:text-[var(--color-text)]
-                  prose-p:text-[var(--color-text-muted)]
-                  prose-a:text-[var(--color-primary)]
-                  prose-pre:bg-[var(--color-card)]
-                  prose-pre:border prose-pre:border-[var(--color-card-border)]">
+      <!-- 封面图 -->
+      {post.data.cover && (
+        <div class="mb-14 -mx-6 md:mx-0 overflow-hidden rounded-2xl">
+          <img
+            src={post.data.cover}
+            alt={post.data.title}
+            class="w-full object-cover max-h-[480px]"
+            loading="eager"
+          />
+        </div>
+      )}
+
+      <!-- 文章正文 -->
+      <div class="prose prose-lg max-w-none
+                  prose-p:text-[var(--color-text)]/85 prose-p:leading-[1.85] prose-p:mb-6 prose-p:text-[17px]
+                  prose-headings:text-[var(--color-text)] prose-headings:font-semibold prose-headings:tracking-tight
+                  prose-a:text-[var(--color-primary)] prose-a:no-underline hover:prose-a:underline
+                  prose-strong:text-[var(--color-text)] prose-strong:font-semibold
+                  prose-blockquote:border-l-[var(--color-primary)] prose-blockquote:bg-[var(--color-primary)]/5
+                  prose-blockquote:rounded-r-lg prose-blockquote:py-3 prose-blockquote:px-6
+                  prose-blockquote:text-[var(--color-text-muted)] prose-blockquote:not-italic
+                  prose-img:rounded-2xl prose-img:shadow-lg
+                  prose-hr:border-[var(--color-card-border)]
+                  prose-code:text-[var(--color-accent)] prose-code:bg-[var(--color-primary)]/10
+                  prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-sm
+                  prose-pre:bg-[var(--color-card)] prose-pre:border prose-pre:border-[var(--color-card-border)]
+                  prose-pre:rounded-2xl prose-pre:shadow-sm
+                  prose-li:text-[var(--color-text)]/85">
         <Content />
       </div>
     </article>
+
+    <!-- 底部分隔 -->
+    <div class="gradient-line my-16"></div>
+
+    <!-- 返回 -->
+    <div class="text-center">
+      <a href={`${import.meta.env.BASE_URL}${lang}/blog`
+        } class="inline-flex items-center gap-2 text-sm text-[var(--color-text-muted)]
+                  hover:text-[var(--color-primary)] transition-colors duration-300">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        {t.blog.backToList}
+      </a>
+    </div>
   </main>
   <Footer lang={lang} />
 </Layout>
