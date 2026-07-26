@@ -21,6 +21,6 @@ But "life has no universal progress bar." Why must I find all the answers at 22?
 
 Wang Hong won the Fields Medal after years of deep dedication. She must have had moments of doubt and hesitation too, but she kept her own rhythm. Graduate school isn't the destination — it's just the starting point of one chapter. Even if I can't see clearly where I'll be in ten years, as long as the direction is upward, what's the harm in going a little slower?
 
-I've decided to embrace this uncertainty, to treat it as part of growing up. Choosing graduate school isn't about fearing the real world — it's because I still want to spend a few more years deepening my knowledge in this field. Maybe three years from now I still won't have found "life's answers," but at least I'll be closer to them.
+Perhaps I should learn to embrace this uncertainty, to treat it as part of growing up. Choosing graduate school isn't about fearing the real world — it's because I still want to spend a few more years deepening my knowledge in this field, searching for answers a while longer. Maybe three years from now I still won't have found "life's answers," but at least I'll be closer to them.
 
 Keep your own rhythm. Take it slow. There's no rush.
