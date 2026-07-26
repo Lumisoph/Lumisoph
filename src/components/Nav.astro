@@ -21,6 +21,7 @@ const links = [
 ];
 
 const isActive = (href: string) => {
+  if (currentPath === '/') return href.includes(`/${lang}/`) && href.endsWith(`/${lang}/`);
   return currentPath.startsWith(`/${lang}/`) && href.includes(`/${lang}/`);
 };
 
@@ -56,8 +57,9 @@ const langHref = `${base}${targetLang}/${currentPath.replace(/^\/(zh|en)\//, '')
       </div>
 
       <div class="md:hidden flex items-center gap-2">
+        <FontSizeToggle client:load />
         <ThemeToggle client:load />
-        <LangToggle client:load currentPath={currentPath} currentLang={lang} />
+        <LangToggle client:load href={langHref} label={targetLang === 'zh' ? '中文' : 'EN'} />
         <button
           id="hamburger"
           class="p-2 rounded-btn hover:bg-[var(--color-card-border)] transition-colors duration-300"
