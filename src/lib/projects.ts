@@ -8,11 +8,19 @@ export interface ProjectCardData {
 }
 
 // 要展示的 GitHub 仓库（构建时拉取 README 作为简介）
-const repos: { owner: string; repo: string; tags: string[]; demo?: string }[] = [
+// description 可选：手动覆盖简介（README 非中文时给中文站写中文简介）
+const repos: {
+  owner: string;
+  repo: string;
+  tags: string[];
+  demo?: string;
+  description?: string;
+}[] = [
   {
     owner: 'Lumisoph',
     repo: 'Lumisoph',
     tags: ['Astro', 'React', 'Tailwind CSS'],
+    description: '探索 LLM 智能体如何诊断故障、积累经验，并演化可复用的能力。LLM 智能体 · 工具使用 · 记忆 · 能力诊断 · 技能演化。',
   },
   {
     owner: 'Lumisoph',
@@ -55,12 +63,12 @@ function parseReadme(raw: string, fallbackTitle: string) {
 
 export async function getGithubProjects(): Promise<ProjectCardData[]> {
   return Promise.all(
-    repos.map(async ({ owner, repo, tags, demo }) => {
+    repos.map(async ({ owner, repo, tags, demo, description: override }) => {
       const raw = await fetchReadme(owner, repo);
       const { title, description } = parseReadme(raw, repo);
       return {
         title,
-        description,
+        description: override ?? description,
         tags,
         github: `https://github.com/${owner}/${repo}`,
         demo,
