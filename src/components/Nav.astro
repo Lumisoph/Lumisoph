@@ -20,9 +20,15 @@ const links = [
   { href: `${base}${lang}/photos`, label: t.nav.photos },
 ];
 
+// 规范化路径：去掉末尾斜杠，便于精确比较
+const normalize = (p: string) => p.replace(/\/+$/, '') || '/';
+
 const isActive = (href: string) => {
-  if (currentPath === '/') return href.includes(`/${lang}/`) && href.endsWith(`/${lang}/`);
-  return currentPath.startsWith(`/${lang}/`) && href.includes(`/${lang}/`);
+  const current = normalize(currentPath);
+  const target = normalize(href.replace(base, '/'));
+  if (target === `/${lang}`) return current === `/${lang}`;
+  // 只在当前路径确实位于该栏目下时高亮
+  return current.startsWith(target);
 };
 
 const targetLang = lang === 'zh' ? 'en' : 'zh';

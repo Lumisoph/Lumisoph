@@ -11,7 +11,7 @@ const { post, lang } = Astro.props;
 const t = getI18n(lang);
 const { title, description, date, tags, cover } = post.data;
 
-const slug = post.id.replace(/^(zh|en)\//, '');
+const slug = post.id.replace(/^(zh|en)\//, '').replace(/\.md$/, '');
 ---
 
 <article class="card-base overflow-hidden hover:-translate-y-1.5 flex flex-col group">

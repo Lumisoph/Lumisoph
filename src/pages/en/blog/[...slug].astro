@@ -11,14 +11,14 @@ const t = getI18n(lang);
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ id }) => id.startsWith('en/'));
   return posts.map((post) => ({
-    params: { slug: post.id.replace(/^en\//, '') },
+    params: { slug: post.id.replace(/^en\//, '').replace(/\.md$/, '') },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const currentPath = `/en/blog/${post.id.replace(/^en\//, '')}`;
+const currentPath = `/en/blog/${post.id.replace(/^en\//, '').replace(/\.md$/, '')}`;
 ---
 
 <Layout lang={lang} title={`${post.data.title} - ${t.site.title}`} description={post.data.description}>
