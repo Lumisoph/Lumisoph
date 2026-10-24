@@ -18,6 +18,12 @@ const repos: {
 }[] = [
   {
     owner: 'Lumisoph',
+    repo: 'AgentSkillOps',
+    tags: ['Python', 'LLM Agent', 'Evaluation'],
+    description: '面向 LLM 智能体的可审计技能效用评估与生命周期治理系统，让技能的保留、复测、停用和恢复都有可复核的证据。',
+  },
+  {
+    owner: 'Lumisoph',
     repo: 'enterprise-travel-agent',
     tags: ['Python', 'Multi-Agent', 'RAG'],
     description: '面向企业差旅场景的多智能体助手，支持差旅需求理解、企业制度检索、实时信息查询、用户偏好记忆与行程规划。',
