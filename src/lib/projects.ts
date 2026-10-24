@@ -18,6 +18,12 @@ const repos: {
 }[] = [
   {
     owner: 'Lumisoph',
+    repo: 'enterprise-travel-agent',
+    tags: ['Python', 'Multi-Agent', 'RAG'],
+    description: '面向企业差旅场景的多智能体助手，支持差旅需求理解、企业制度检索、实时信息查询、用户偏好记忆与行程规划。',
+  },
+  {
+    owner: 'Lumisoph',
     repo: 'Lumisoph',
     tags: ['Astro', 'React', 'Tailwind CSS'],
     description: '探索 LLM 智能体如何诊断故障、积累经验，并演化可复用的能力。LLM 智能体 · 工具使用 · 记忆 · 能力诊断 · 技能演化。',
